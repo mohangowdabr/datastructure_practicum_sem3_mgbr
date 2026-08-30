@@ -1,50 +1,33 @@
 #include <iostream>
 using namespace std;
 
-int main()
-{
+int main() {
     int n;
-
-   
-    cout << "Enter the size of array: ";
+    cout << "Size: ";
     cin >> n;
-
-    int arr1[n];
-
-  
-    cout << "Enter " << n << " elements:" << endl;
-
-    for (int i = 0; i < n; i++)
-    {
-        cin >> arr1[i];
-    }
-
+    int arr[n];
     
-    cout << "\nOriginal Array:" << endl;
-
+    // Input
     for (int i = 0; i < n; i++)
-    {
-        cout << arr1[i] << " ";
-    }
-
-   
-    int index, newValue;
-
-    cout << "\n\nEnter index to modify: ";
-    cin >> index;
-
-    cout << "Enter new value: ";
-    cin >> newValue;
-
-    arr1[index] = newValue;
-
-   
-    cout << "\nModified Array:" << endl;
-
+        cin >> arr[i];
+    
+    // Display
+    cout << "Array: ";
     for (int i = 0; i < n; i++)
-    {
-        cout << arr1[i] << " ";
-    }
-
+        cout << arr[i] << " ";
+    
+    // Modify
+    int idx, val;
+    cout << "\nIndex: ";
+    cin >> idx;
+    cout << "New value: ";
+    cin >> val;
+    arr[idx] = val;
+    
+    // Display modified
+    cout << "Modified: ";
+    for (int i = 0; i < n; i++)
+        cout << arr[i] << " ";
+    
     return 0;
 }
