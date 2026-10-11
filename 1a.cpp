@@ -6,7 +6,7 @@ int main(){
     cin>>n;
     int arr1[n];
     cout<<"Enter "<<n<<" Elements : ";
-    for(int i=0; i<n; i++){
+    for( int i=0; i<n; i++){
         cin>>arr1[i];
     }
     cout<<"Array : ";
