@@ -1,160 +1,154 @@
+Queue using Linked List
 #include <iostream>
 using namespace std;
 struct Node {
-    int data;
-    Node* next;
+ int id;
+ Node* next;
 };
-class Queue {
-private:
-    Node* front;
-    Node* rear;
-public:
-    Queue() {
-        front = NULL;
-        rear = NULL;
-    }
-    void enqueue(int value) {
-        Node* newNode = new Node();
-        newNode->data = value;
-        newNode->next = NULL;
-        if (isEmpty()) {
-            front = newNode;
-            rear = newNode;
-        } else {
-            rear->next = newNode;
-            rear = newNode;
-        }
-        cout << "Student ID " << value << " registered successfully" << endl;
-    }
-    void dequeue() {
-        if (isEmpty()) {
-            cout << "Queue is empty" << endl;
-            return;
-        }
-        Node* temp = front;
-        cout << "Delete the first registered student" << endl;
-        cout << "Dequeued: " << temp->data << endl;
-        front = front->next;
-        if (front == NULL) {
-            rear = NULL;
-        }
-        delete temp;
-    }
-    void viewFront() {
-        if (isEmpty()) {
-            cout << "Queue is empty" << endl;
-            return;
-        }
-        cout << "View the next student" << endl;
-        cout << front->data << endl;
-    }
-    void viewRear() {
-        if (isEmpty()) {
-            cout << "Queue is empty" << endl;
-            return;
-        }
-        cout << "View the last registered student" << endl;
-        cout << rear->data << endl;
-    }
-    void display() {
-        if (isEmpty()) {
-            cout << "Queue is empty" << endl;
-            return;
-        }
-        cout << "Current Queue Contents:" << endl;
-        Node* temp = front;
-        while (temp != NULL) {
-            cout << temp->data << " ";
-            temp = temp->next;
-        }
-        cout << endl;
-    }
-    void search(int value) {
-        Node* temp = front;
-        int position = 1;
-        while (temp != NULL) {
-            if (temp->data == value) {
-                cout << "Element found at position: " << position << endl;
-                return;
-            }
-            temp = temp->next;
-            position++;
-        }
-        cout << "Element not found" << endl;
-    }
-    bool isEmpty() {
-        return (front == NULL);
-    }
-
-    void printEmpty() {
-        if (isEmpty()) {
-            cout << "Check the number of kits available" << endl;
-            cout << "Queue is empty" << endl;
-        } else {
-            cout << "Queue has elements" << endl;
-        }
-    }
-    int size() {
-        int count = 0;
-        Node* temp = front;
-        while (temp != NULL) {
-            count++;
-            temp = temp->next;
-        }
-        return count;
-    }
-    ~Queue() {
-        while (!isEmpty()) {
-            dequeue();
-        }
-    }
-};
+Node* FRONT = NULL;
+Node* REAR = NULL;
+void enqueue(int id) {
+ Node* newNode = new Node;
+ newNode->id = id;
+ newNode->next = NULL;
+ if (FRONT == NULL) {
+ FRONT = REAR = newNode;
+ } else {
+ REAR->next = newNode;
+ REAR = newNode;
+ }
+ cout << "Student registered: " << id <<
+endl;
+}
+void dequeue() {
+ if (FRONT == NULL) {
+ cout << "Queue is empty" << endl;
+ return;
+ }
+ Node* temp = FRONT;
+ cout << "Student removed: " << temp-
+>id << endl;
+ FRONT = FRONT->next;
+ if (FRONT == NULL)
+ REAR = NULL;
+ delete temp;
+}
+void frontElement() {
+ if (FRONT == NULL)
+ cout << "Queue is empty" << endl;
+ else
+ cout << "Front student: " << FRONT-
+>id << endl;
+}
+void rearElement() {
+ if (REAR == NULL)
+ cout << "Queue is empty" << endl;
+ else
+ cout << "Rear student: " << REAR->id
+<< endl;
+}
+void display() {
+ if (FRONT == NULL) {
+ cout << "Queue is empty" << endl;
+ return;
+ }
+ Node* temp = FRONT;
+ cout << "Queue: ";
+ while (temp != NULL) {
+ cout << temp->id << " ";
+ temp = temp->next;
+ }
+ cout << endl;
+}
+void search(int id) {
+ Node* temp = FRONT;
+ int pos = 1;
+ while (temp != NULL) {
+ if (temp->id == id) {
+ cout << "Student found at position
+" << pos << endl;
+ return;
+ }
+ temp = temp->next;
+ pos++;
+ }
+ cout << "Student not found" << endl;
+}
+void isEmpty() {
+ if (FRONT == NULL)
+ cout << "Queue is empty" << endl;
+ else
+ cout << "Queue is not empty" <<
+endl;
+}
+void size() {
+ int count = 0;
+ Node* temp = FRONT;
+ while (temp != NULL) {
+ count++;
+ temp = temp->next;
+ }
+ cout << "Total students: " << count <<
+endl;
+}
 int main() {
-    Queue queue;
-    int choice, value;
-
-    cout << "\n==queue operations==" << endl;
-    while (true) {
-        cout << "\n1. Enqueue\n2. Dequeue\n3. Front\n4. Rear\n5. Display\n6. Search\n7. Size\n8. IsEmpty\n9. Exit\n";
-        cout << "Enter choice: ";
-        cin >> choice;
-
-        switch (choice) {
-        case 1:
-            cout << "Enter student ID to enqueue: ";
-            cin >> value;
-            queue.enqueue(value);
-            break;
-        case 2:
-            queue.dequeue();
-            break;
-        case 3:
-            queue.viewFront();
-            break;
-        case 4:
-            queue.viewRear();
-            break;
-        case 5:
-            queue.display();
-            break;
-        case 6:
-            cout << "Enter student ID to search: ";
-            cin >> value;
-            queue.search(value);
-            break;
-        case 7:
-            cout << "Queue size: " << queue.size() << endl;
-            break;
-        case 8:
-            queue.printEmpty();
-            break;
-        case 9:
-            cout << "Exiting..." << endl;
-            return 0;
-        default:
-            cout << "Invalid choice!" << endl;
-        }
-    }
-
-    return 0;
+ int choice, id;
+ do {
+ cout << "\n--- QUEUE MENU ---\n";
+ cout << "1. Enqueue\n";
+ cout << "2. Dequeue\n";
+ cout << "3. Front\n";
+ cout << "4. Rear\n";
+ cout << "5. Display\n";
+ cout << "6. Search\n";
+ cout << "7. IsEmpty\n";
+ cout << "8. Size\n";
+ cout << "9. Exit\n";
+ cout << "Enter choice: ";
+ cin >> choice;
+ switch (choice) {
+ case 1:
+ cout << "Enter student ID: ";
+ cin >> id;
+ enqueue(id);
+ break;
+ case 2:
+ dequeue();
+ break;
+ case 3:
+ frontElement();
+ break;
+ case 4:
+ rearElement();
+ break;
+ case 5:
+ display();
+ break;
+ case 6:
+ cout << "Enter student ID to
+search: ";
+ cin >> id;
+ search(id);
+ break;
+ case 7:
+ isEmpty();
+ break;
+ case 8:
+ size();
+ break;
+ case 9:
+ cout << "Exiting queue program"
+<< endl;
+ break;
+ default:
+ cout << "Invalid choice" << endl;
+ }
+ } while (choice != 9);
+ while (FRONT != NULL) {
+ Node* temp = FRONT;
+ FRONT = FRONT->next;
+ delete temp;
+ }
+ REAR = NULL;
+ return 0;
 }
