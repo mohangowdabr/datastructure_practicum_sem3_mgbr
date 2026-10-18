@@ -1,103 +1,85 @@
 
 #include <iostream>
 #include <queue>
-#include <limits>
 using namespace std;
 
-struct Node {
+struct Node
+{
     int data;
     Node *left, *right;
-
-    Node(int value) {
-        data = value;
-        left = right = NULL;
-    }
 };
 
-// Insert a node using level-order insertion
-void insert(Node *&root, int value) {
-    Node *newNode = new Node(value);
+Node* createNode(int value)
+{
+    Node *newNode = new Node;
+    newNode->data = value;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
 
-    if (root == NULL) {
+void insert(Node *&root, int value)
+{
+    Node *newNode = createNode(value);
+
+    if (root == NULL)
+    {
         root = newNode;
-        cout << "Node inserted successfully.\n";
+        cout << "Node inserted successfully\n";
         return;
     }
 
     queue<Node*> q;
     q.push(root);
 
-    while (!q.empty()) {
+    while (q.size() > 0)
+    {
         Node *temp = q.front();
         q.pop();
 
-        if (temp->left == NULL) {
+        if (temp->left == NULL)
+        {
             temp->left = newNode;
-            break;
-        } else {
+            cout << "Node inserted successfully\n";
+            return;
+        }
+        else
+        {
             q.push(temp->left);
         }
 
-        if (temp->right == NULL) {
+        if (temp->right == NULL)
+        {
             temp->right = newNode;
-            break;
-        } else {
+            cout << "Node inserted successfully\n";
+            return;
+        }
+        else
+        {
             q.push(temp->right);
         }
     }
-
-    cout << "Node inserted successfully.\n";
 }
 
-// Search for an element
-bool search(Node *root, int key) {
+void search(Node *root, int value)
+{
     if (root == NULL)
-        return false;
-
-    queue<Node*> q;
-    q.push(root);
-
-    while (!q.empty()) {
-        Node *temp = q.front();
-        q.pop();
-
-        if (temp->data == key)
-            return true;
-
-        if (temp->left != NULL)
-            q.push(temp->left);
-
-        if (temp->right != NULL)
-            q.push(temp->right);
-    }
-
-    return false;
-}
-
-// Delete the deepest rightmost node
-void deleteDeepestNode(Node *&root, Node *deepest) {
-    if (root == deepest) {
-        delete root;
-        root = NULL;
+    {
+        cout << "Tree is empty\n";
         return;
     }
 
     queue<Node*> q;
     q.push(root);
 
-    while (!q.empty()) {
+    while (q.size() > 0)
+    {
         Node *temp = q.front();
         q.pop();
 
-        if (temp->left == deepest) {
-            delete temp->left;
-            temp->left = NULL;
-            return;
-        }
-
-        if (temp->right == deepest) {
-            delete temp->right;
-            temp->right = NULL;
+        if (temp->data == value)
+        {
+            cout << "Node found\n";
             return;
         }
 
@@ -107,61 +89,115 @@ void deleteDeepestNode(Node *&root, Node *deepest) {
         if (temp->right != NULL)
             q.push(temp->right);
     }
+
+    cout << "Node not found\n";
 }
 
-// Delete a specified element
-bool deleteNode(Node *&root, int key) {
+void deleteDeepest(Node *root, Node *last)
+{
+    queue<Node*> q;
+    q.push(root);
+
+    while (q.size() > 0)
+    {
+        Node *temp = q.front();
+        q.pop();
+
+        if (temp->left != NULL)
+        {
+            if (temp->left == last)
+            {
+                delete temp->left;
+                temp->left = NULL;
+                return;
+            }
+            q.push(temp->left);
+        }
+
+        if (temp->right != NULL)
+        {
+            if (temp->right == last)
+            {
+                delete temp->right;
+                temp->right = NULL;
+                return;
+            }
+            q.push(temp->right);
+        }
+    }
+}
+
+void deleteNode(Node *&root, int value)
+{
     if (root == NULL)
-        return false;
+    {
+        cout << "Tree is empty\n";
+        return;
+    }
+
+    if (root->left == NULL && root->right == NULL)
+    {
+        if (root->data == value)
+        {
+            delete root;
+            root = NULL;
+            cout << "Node deleted successfully\n";
+        }
+        else
+        {
+            cout << "Node not found\n";
+        }
+        return;
+    }
 
     queue<Node*> q;
     q.push(root);
 
     Node *target = NULL;
-    Node *deepest = NULL;
+    Node *last = NULL;
 
-    while (!q.empty()) {
-        Node *temp = q.front();
+    while (q.size() > 0)
+    {
+        last = q.front();
         q.pop();
 
-        if (temp->data == key && target == NULL)
-            target = temp;
+        if (last->data == value)
+            target = last;
 
-        deepest = temp;
+        if (last->left != NULL)
+            q.push(last->left);
 
-        if (temp->left != NULL)
-            q.push(temp->left);
-
-        if (temp->right != NULL)
-            q.push(temp->right);
+        if (last->right != NULL)
+            q.push(last->right);
     }
 
     if (target == NULL)
-        return false;
-
-    if (target == deepest) {
-        deleteDeepestNode(root, deepest);
-    } else {
-        target->data = deepest->data;
-        deleteDeepestNode(root, deepest);
+    {
+        cout << "Node not found\n";
+        return;
     }
 
-    return true;
+    target->data = last->data;
+    deleteDeepest(root, last);
+
+    cout << "Node deleted successfully\n";
 }
 
-// Display the tree in level order
-void display(Node *root) {
-    if (root == NULL) {
-        cout << "Tree is empty.\n";
+void display(Node *root)
+{
+    if (root == NULL)
+    {
+        cout << "Tree is empty\n";
         return;
     }
 
     queue<Node*> q;
     q.push(root);
 
-    cout << "Binary Tree (Level Order): ";
+    cout << "Tree elements: ";
 
-    while (!q.empty()) {
+    while (q.size() > 0)
+    {
         Node *temp = q.front();
         q.pop();
 
@@ -174,25 +210,17 @@ void display(Node *root) {
             q.push(temp->right);
     }
 
-    cout << "\n";
+    cout << endl;
 }
 
-// Release all allocated memory
-void freeTree(Node *root) {
-    if (root == NULL)
-        return;
-
-    freeTree(root->left);
-    freeTree(root->right);
-    delete root;
-}
-
-int main() {
+int main()
+{
     Node *root = NULL;
     int choice, value;
 
-    do {
-        cout << "\n===== BINARY TREE OPERATIONS =====\n";
+    do
+    {
+        cout << "\n--- BINARY TREE OPERATIONS ---\n";
         cout << "1. Insert Node\n";
         cout << "2. Search Node\n";
         cout << "3. Delete Node\n";
@@ -200,53 +228,45 @@ int main() {
         cout << "5. Exit\n";
         cout << "Enter your choice: ";
 
-        if (!(cin >> choice)) {
-            cout << "Invalid input! Enter an integer.\n";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            continue;
+        if (!(cin >> choice))
+        {
+            cout << "Invalid input\n";
+            break;
         }
 
-        switch (choice) {
+        switch (choice)
+        {
             case 1:
-                cout << "Enter value to insert: ";
-                if (!(cin >> value)) {
-                    cout << "Invalid input! Enter an integer.\n";
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
+                cout << "Enter value: ";
+                if (cin >> value)
+                    insert(root, value);
+                else
+                {
+                    cout << "Invalid input\n";
+                    return 0;
                 }
-                insert(root, value);
                 break;
 
             case 2:
                 cout << "Enter value to search: ";
-                if (!(cin >> value)) {
-                    cout << "Invalid input! Enter an integer.\n";
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
-                }
-
-                if (search(root, value))
-                    cout << "Element found in the tree.\n";
+                if (cin >> value)
+                    search(root, value);
                 else
-                    cout << "Element not found in the tree.\n";
+                {
+                    cout << "Invalid input\n";
+                    return 0;
+                }
                 break;
 
             case 3:
                 cout << "Enter value to delete: ";
-                if (!(cin >> value)) {
-                    cout << "Invalid input! Enter an integer.\n";
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
-                }
-
-                if (deleteNode(root, value))
-                    cout << "Node deleted successfully.\n";
+                if (cin >> value)
+                    deleteNode(root, value);
                 else
-                    cout << "Element not found. Deletion failed.\n";
+                {
+                    cout << "Invalid input\n";
+                    return 0;
+                }
                 break;
 
             case 4:
@@ -254,15 +274,14 @@ int main() {
                 break;
 
             case 5:
-                cout << "Exiting program.\n";
+                cout << "Exiting program\n";
                 break;
 
             default:
-                cout << "Invalid choice! Try again.\n";
+                cout << "Invalid choice\n";
         }
 
     } while (choice != 5);
 
-    freeTree(root);
     return 0;
 }
